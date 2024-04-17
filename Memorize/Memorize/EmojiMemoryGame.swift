@@ -7,6 +7,30 @@
 
 import SwiftUI
 
+//func createCardContent (forPairAtIndex index: Int) -> String {
+//    return ["👺","🤡","👽","🤖","👻","☠️","👑","💍","🦆","👀","🧀","🤍"][index]
+//}
+
 class EmojiMemoryGame {
-    private var game: MemoryGame<String>
+    private static let emojis = ["👺","🤡","👽","🤖","👻","☠️","👑","💍","🦆","👀","🧀","🤍"]
+    
+    private static func CreateMemoryGame() -> MemoryGame<String> {
+        return MemoryGame(numPairsOfCards: 4) { pairIndex in
+            if emojis.indices.contains(pairIndex){
+                return emojis[pairIndex]
+            } else {
+                return "⁉️"
+            }
+        }
+    }
+    
+    private var game = CreateMemoryGame()
+    
+    var cards: Array<MemoryGame<String>.Card> {
+        return game.cards
+    }
+    
+    func choose(_ card: MemoryGame<String>.Card){
+        game.choose(card)
+    }
 }
