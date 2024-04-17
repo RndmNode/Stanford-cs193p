@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct EmojiMemoryGameView: View {
-    var game: EmojiMemoryGame = EmojiMemoryGame()
-    
-    let emojis = ["👺","🤡","👽","🤖","👻","☠️","👑","💍","🦆","👀","🧀","🤍"]
+    @ObservedObject var game: EmojiMemoryGame
     
     var body: some View {
-        ScrollView {
-            cards
+        VStack {
+            ScrollView {
+                cards
+            }
+            Button("Shuffle"){
+                game.shuffle()
+            }
         }
         .padding()
     }
@@ -57,5 +60,5 @@ struct CardView: View {
 }
 
 #Preview {
-    EmojiMemoryGameView()
+    EmojiMemoryGameView(game: EmojiMemoryGame())
 }
