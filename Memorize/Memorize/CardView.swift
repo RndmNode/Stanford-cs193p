@@ -15,27 +15,21 @@ struct CardView: View {
     }
     
     var body: some View {
-        ZStack {
-            let base = RoundedRectangle(cornerRadius: Constants.cornerRadius)
-            Group {
-                base.fill(.black)
-                base.stroke(style: StrokeStyle(lineWidth: Constants.lineWidth))
-                Pie(endAngle: .degrees(270))
-                    .opacity(Constants.Pie.opacity)
-                    .overlay(
-                        Text(card.content)
-                            .font(.system(size: Constants.FontSize.largest))
-                            .minimumScaleFactor(Constants.FontSize.scaleFactor)
-                            .multilineTextAlignment(.center)
-                            .aspectRatio(contentMode: .fit)
-                            .padding(Constants.Pie.inset)
-                    )
-                    .padding(Constants.inset)
-            }
-            .opacity(card.isFaceUp ? 1 : 0)
-            base.fill().opacity(card.isFaceUp ? 0 : 1)
-        }
-        .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
+        Pie(endAngle: .degrees(270))
+            .opacity(Constants.Pie.opacity)
+            .overlay(
+                Text(card.content)
+                    .font(.system(size: Constants.FontSize.largest))
+                    .minimumScaleFactor(Constants.FontSize.scaleFactor)
+                    .multilineTextAlignment(.center)
+                    .aspectRatio(contentMode: .fit)
+                    .padding(Constants.Pie.inset)
+                    .rotationEffect(.degrees(card.isMatched ? 360 : 0))
+                    .animation(.spin(duration: 1), value: card.isMatched)
+            )
+            .padding(Constants.inset)
+            .cardify(isFaceUp: card.isFaceUp)
+            .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
     }
     
     private struct Constants {
@@ -53,6 +47,12 @@ struct CardView: View {
             static let opacity: CGFloat = 0.65
             static let inset: CGFloat = 5
         }
+    }
+}
+
+extension Animation {
+    static func spin(duration Time: CGFloat) -> Animation {
+        .linear(duration: Time).repeatForever(autoreverses: false)
     }
 }
 
