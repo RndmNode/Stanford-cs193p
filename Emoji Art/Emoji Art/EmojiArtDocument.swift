@@ -9,7 +9,13 @@ import SwiftUI
 
 class EmojiArtDocument : ObservableObject {
     typealias Emoji = EmojiArt.Emoji
-    private var emojiArt = EmojiArt()
+    
+    @Published private var emojiArt = EmojiArt()
+    
+    init() {
+        emojiArt.addEmoji("🦂", at: .init(x: -250, y: 100), size: 200)
+        emojiArt.addEmoji("🦈", at: .init(x: 150, y: 300), size: 100)
+    }
     
     var emojis: [Emoji] {
         emojiArt.emojis
@@ -33,5 +39,12 @@ class EmojiArtDocument : ObservableObject {
 extension EmojiArt.Emoji {
     var font: Font {
         Font.system(size: CGFloat(size))
+    }
+}
+
+extension EmojiArt.Emoji.Position {
+    func `in`(_ geometry: GeometryProxy) -> CGPoint {
+        let center = geometry.frame(in: .local).center
+        return CGPoint(x: center.x + CGFloat(x), y: center.y - CGFloat(y))
     }
 }

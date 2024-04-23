@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct EmojiArtDocumentView: View {
+    typealias Emoji = EmojiArt.Emoji
     @ObservedObject var document: EmojiArtDocument
-    
-    
     
     private let emojis = "👑👻👮🏽‍♂️🧞‍♂️🐒🍀🪐🌪️🥩🍩🪂🚖🚔🚒🚕🚙🏎️🚑🚀🛰️⛩️🪜🕳️🧸🛎️🚽📫📦🇨🇦🇧🇬🇯🇵☢︎☣︎🫎🐙🦖🦕🦍"
     
@@ -27,16 +26,50 @@ struct EmojiArtDocumentView: View {
     }
     
     private var documentBody: some View {
-        ZStack {
-            Color.white
-            // Image goes here
-            // emojis
-            ForEach(document.emojis) { emoji in
-                Text(emoji.string)
-                    .font(emoji.font)
-                    .position(emoji.position)
+        GeometryReader { geometry in
+            ZStack {
+                Color.white
+                AsyncImage(url: document.background)
+                    .position(Emoji.Position.zero.in(geometry))
+                // emojis
+                ForEach(document.emojis) { emoji in
+                    Text(emoji.string)
+                        .font(emoji.font)
+                        .position(emoji.position.in(geometry))
+                }
+            }
+            .dropDestination(for: Sturldata.self) { sturlDatas, location in
+                return drop(sturlDatas, at: location, in: geometry)
             }
         }
+    }
+    
+    private func drop(_ sturlDatas: [Sturldata], at location: CGPoint, in geometry: GeometryProxy) -> Bool {
+        for sturlData in sturlDatas {
+            switch (sturlData) {
+            case .url(let url):
+                document.setBackground(url)
+                return true
+            case .string(let emoji):
+                document.addEmoji(
+                    emoji,
+                    at: emojiPosition(at: location, in: geometry),
+                    size: PaletteEmojiSize
+                )
+                return true
+            default:
+                break
+            }
+        }
+        return false
+    }
+    
+    private func emojiPosition(at location: CGPoint, in geometry: GeometryProxy) -> Emoji.Position {
+        let center = geometry.frame(in: .local).center
+        return Emoji.Position(
+            x: Int(location.x - center.x),
+            y: Int(-(location.y - center.y))
+        )
     }
 }
 
@@ -52,6 +85,7 @@ struct ScrollingEmojis: View {
             HStack {
                 ForEach(emojis, id: \.self) { emoji in
                     Text(emoji)
+                        .draggable(emoji)
                 }
             }
         }
