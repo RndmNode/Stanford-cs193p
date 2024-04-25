@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		590AA9602BD9DE2C0063F7B5 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590AA95F2BD9DE2C0063F7B5 /* AspectVGrid.swift */; };
 		5923C6092BD3038300E6B1B1 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5923C6082BD3038300E6B1B1 /* CardView.swift */; };
 		5923C60B2BD3208E00E6B1B1 /* Pie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5923C60A2BD3208E00E6B1B1 /* Pie.swift */; };
 		59F0AD632BC9DB77005399B5 /* MemorizeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F0AD622BC9DB77005399B5 /* MemorizeApp.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		590AA95F2BD9DE2C0063F7B5 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		5923C6082BD3038300E6B1B1 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		5923C60A2BD3208E00E6B1B1 /* Pie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pie.swift; sourceTree = "<group>"; };
 		59F0AD5F2BC9DB77005399B5 /* Memorize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memorize.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +71,7 @@
 				59F0AD622BC9DB77005399B5 /* MemorizeApp.swift */,
 				59F0AD642BC9DB77005399B5 /* EmojiMemoryGameView.swift */,
 				59F7C4E32BD48E3C002111D7 /* FlyingNumber.swift */,
+				590AA95F2BD9DE2C0063F7B5 /* AspectVGrid.swift */,
 				5923C6082BD3038300E6B1B1 /* CardView.swift */,
 				5923C60A2BD3208E00E6B1B1 /* Pie.swift */,
 				59F0AD662BC9DB78005399B5 /* Assets.xcassets */,
@@ -163,6 +166,7 @@
 				59F94F342BCF53A200CF110E /* EmojiMemoryGame.swift in Sources */,
 				5923C6092BD3038300E6B1B1 /* CardView.swift in Sources */,
 				59F7C4E42BD48E3C002111D7 /* FlyingNumber.swift in Sources */,
+				590AA9602BD9DE2C0063F7B5 /* AspectVGrid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
