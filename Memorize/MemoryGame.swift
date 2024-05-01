@@ -22,10 +22,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
-    mutating func shuffle() {
-        cards.shuffle()
-    }
-    
     var indexOfTheOneAndOnlyFaceUpCard: Int? {
         get { cards.indices.filter { index in cards[index].isFaceUp }.only }
         set { cards.indices.forEach { cards[$0].isFaceUp = (newValue == $0) } }
@@ -53,6 +49,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 cards[chosenIndex].isFaceUp = true
             }
         }
+    }
+    
+    mutating func shuffle() {
+        cards.shuffle()
     }
     
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
