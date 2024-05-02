@@ -31,9 +31,9 @@ struct EmojiArtDocumentView: View {
                 Color.white
                 documentContents(in: geometry)
                     .scaleEffect(zoom * gestureZoom )
-                    .offset(pan)
+                    .offset(pan + gesturePan)
             }
-            .gesture(zoomGesture)
+            .gesture(panGesture.simultaneously(with: zoomGesture))
             .dropDestination(for: Sturldata.self) { sturlDatas, location in
                 return drop(sturlDatas, at: location, in: geometry)
             }
@@ -44,6 +44,7 @@ struct EmojiArtDocumentView: View {
     @State private var pan: CGOffset = .zero
     
     @GestureState private var gestureZoom: CGFloat = 1
+    @GestureState private var gesturePan: CGOffset = .zero
     
     private var zoomGesture: some Gesture {
         MagnificationGesture()
@@ -52,6 +53,16 @@ struct EmojiArtDocumentView: View {
             }
             .onEnded { endingPinchScale in
                 zoom *= endingPinchScale
+            }
+    }
+    
+    private var panGesture: some Gesture {
+        DragGesture()
+            .updating($gesturePan) { value, gesturePan, _ in
+                gesturePan = value.translation
+            }
+            .onEnded { value in
+                pan += value.translation
             }
     }
     
@@ -77,7 +88,7 @@ struct EmojiArtDocumentView: View {
                 document.addEmoji(
                     emoji,
                     at: emojiPosition(at: location, in: geometry),
-                    size: PaletteEmojiSize
+                    size: PaletteEmojiSize / zoom
                 )
                 return true
             default:
@@ -90,8 +101,8 @@ struct EmojiArtDocumentView: View {
     private func emojiPosition(at location: CGPoint, in geometry: GeometryProxy) -> Emoji.Position {
         let center = geometry.frame(in: .local).center
         return Emoji.Position(
-            x: Int(location.x - center.x),
-            y: Int(-(location.y - center.y))
+            x: Int((location.x - center.x - pan.width) / zoom),
+            y: Int(-(location.y - center.y - pan.height) / zoom)
         )
     }
 }
