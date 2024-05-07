@@ -73,6 +73,9 @@ struct EmojiArtDocumentView: View {
             Text(emoji.string)
                 .font(emoji.font)
                 .position(emoji.position.in(geometry))
+                .onTapGesture {
+                    document.selectEmoji(id: emoji.id)
+                }
         }
     }
     

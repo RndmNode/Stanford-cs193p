@@ -19,14 +19,39 @@ struct EmojiArt {
             string: emoji,
             position: position,
             size: size,
+            selected: false,
             id: uniqueEmojiID
         ))
     }
     
-    struct Emoji:  Identifiable{
+    mutating func selectEmoji (id emojiID: Int) {
+        let emojiIndex: Int? = getEmojiIndex(id: emojiID)
+        if emojiIndex != nil {
+            let index = emojiIndex!
+            emojis[index].selected = !emojis[index].selected
+            print("Tapped on ", emojis[index].string, " at (", emojis[index].position.x, ",", emojis[index].position.y, ")")
+        } else {
+            print("ERROR: Emoji id not found in model's emojis array")
+        }
+    }
+    
+    func getEmojiIndex(id emojiID: Int) -> Int? {
+        var i = 0
+        for emoji in emojis {
+            if emoji.id == emojiID {
+                return i
+            } else {
+                i += 1
+            }
+        }
+        return nil
+    }
+    
+    struct Emoji: Identifiable {
         let string: String
         var position: Position
         var size: Int
+        var selected: Bool
         var id: Int
         
         struct Position {
