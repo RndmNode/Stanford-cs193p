@@ -7,9 +7,23 @@
 
 import Foundation
 
-struct EmojiArt {
+struct EmojiArt : Codable {
     var background: URL?
     private(set) var emojis = [Emoji]()
+    
+    init(json: Data) throws {
+        self = try JSONDecoder().decode(EmojiArt.self, from: json)
+    }
+    
+    init() {
+        
+    }
+    
+    func json() throws -> Data {
+        let encoded = try JSONEncoder().encode(self)
+        print("EmopjiArt = \(String(data: encoded, encoding: .utf8) ?? "nil")")
+        return encoded
+    }
     
     private var uniqueEmojiID = 0
     
@@ -24,37 +38,14 @@ struct EmojiArt {
         ))
     }
     
-    mutating func selectEmoji (id emojiID: Int) {
-        let emojiIndex: Int? = getEmojiIndex(id: emojiID)
-        if emojiIndex != nil {
-            let index = emojiIndex!
-            emojis[index].selected = !emojis[index].selected
-            print("Tapped on ", emojis[index].string, " at (", emojis[index].position.x, ",", emojis[index].position.y, ")")
-        } else {
-            print("ERROR: Emoji id not found in model's emojis array")
-        }
-    }
-    
-    func getEmojiIndex(id emojiID: Int) -> Int? {
-        var i = 0
-        for emoji in emojis {
-            if emoji.id == emojiID {
-                return i
-            } else {
-                i += 1
-            }
-        }
-        return nil
-    }
-    
-    struct Emoji: Identifiable {
+    struct Emoji: Identifiable, Codable {
         let string: String
         var position: Position
         var size: Int
         var selected: Bool
         var id: Int
         
-        struct Position {
+        struct Position : Codable {
             var x: Int
             var y: Int
             
