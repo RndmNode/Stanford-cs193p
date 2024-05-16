@@ -56,10 +56,6 @@ class EmojiArtDocument : ObservableObject {
     func addEmoji (_ emoji: String, at position: Emoji.Position, size: CGFloat) {
         emojiArt.addEmoji(emoji, at: position, size: Int(size))
     }
-    
-    func selectEmoji (id emojiID: Int) {
-        emojiArt.selectEmoji(id: emojiID)
-    }
 }
 
 extension EmojiArt.Emoji {
