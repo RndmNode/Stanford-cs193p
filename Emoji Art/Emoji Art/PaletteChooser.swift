@@ -11,6 +11,7 @@ struct PaletteChooser: View {
     @EnvironmentObject var store: PaletteStore
     
     @State private var showPaletteEditor = false
+    @State private var showPaletteList = false
     
     var body: some View {
         HStack {
@@ -22,6 +23,10 @@ struct PaletteChooser: View {
             PaletteEditor(palette: $store.palettes[store.cursorIndex])
                 .font(nil)
         }
+        .sheet(isPresented: $showPaletteList) {
+            EditablePaletteList()
+                .font(nil)
+        }
     }
     
     var chooser: some View {
@@ -31,13 +36,17 @@ struct PaletteChooser: View {
         .contextMenu {
             goToMenu
             AnimatedActionButton("New", systemImage: "plus") {
-                store.insert(Palette(name: "Math", emojis: "+÷×−∞"))
+                store.insert(Palette(name: "", emojis: ""))
+                showPaletteEditor = true
             }
             AnimatedActionButton("Delete", systemImage: "minus.circle", role: .destructive) {
                 store.palettes.remove(at: store.cursorIndex)
             }
             AnimatedActionButton("Edit", systemImage: "pencil") {
                 showPaletteEditor = true
+            }
+            AnimatedActionButton("List", systemImage: "list.bullet.rectangle.portrait") {
+                showPaletteList = true
             }
         }
     }

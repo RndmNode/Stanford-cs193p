@@ -67,6 +67,15 @@ struct PaletteEditor: View {
     }
 }
 
-//#Preview {
-//    PaletteEditor()
-//}
+
+//MARK: Preview
+struct testPreview: View {
+    @State var previewPalette = PaletteStore(named: "Preview").palettes.first!
+    var body: some View {
+        PaletteEditor(palette: $previewPalette)
+    }
+}
+
+#Preview {
+    testPreview()
+}

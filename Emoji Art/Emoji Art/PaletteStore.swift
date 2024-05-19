@@ -22,8 +22,10 @@ extension UserDefaults {
     }
 }
 
-class PaletteStore : ObservableObject {
+class PaletteStore : ObservableObject, Identifiable {
     let name: String
+    
+    var id: String { name }
     
     private var userDefaultsKey: String { "PaletteStore:" + name }
     
