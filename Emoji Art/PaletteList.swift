@@ -26,15 +26,14 @@ struct PaletteList: View {
 }
 
 struct EditablePaletteList: View {
-    @EnvironmentObject var store: PaletteStore
+    @ObservedObject var store: PaletteStore
     
     @State private var showCursorPalette = false
     
     var body: some View {
-        NavigationStack {
             List {
                 ForEach(store.palettes) { palette in
-                    NavigationLink(value: palette) {
+                    NavigationLink(value: palette.id) {
                         VStack {
                             Text(palette.name)
                             Text(palette.emojis).lineLimit(1)
@@ -50,8 +49,8 @@ struct EditablePaletteList: View {
                     store.palettes.move(fromOffsets: indexSet, toOffset: newOffset)
                 }
             }
-            .navigationDestination(for: Palette.self) { palette in
-                if let index = store.palettes.firstIndex(where: { $0.id == palette.id }) {
+            .navigationDestination(for: Palette.ID.self) { paletteId in
+                if let index = store.palettes.firstIndex(where: { $0.id == paletteId }) {
                     PaletteEditor(palette: $store.palettes[index])
                 }
             }
@@ -67,7 +66,6 @@ struct EditablePaletteList: View {
                     Image(systemName: "plus")
                 }
             }
-        }
     }
 }
 
