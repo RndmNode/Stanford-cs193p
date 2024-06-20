@@ -27,6 +27,9 @@ struct EmojiArtDocumentView: View {
         GeometryReader { geometry in
             ZStack {
                 Color.white
+                if document.background.isFetching {
+                    ProgressView()
+                }
                 documentContents(in: geometry)
                     .scaleEffect(zoom * gestureZoom )
                     .offset(pan + gesturePan)
@@ -35,8 +38,24 @@ struct EmojiArtDocumentView: View {
             .dropDestination(for: Sturldata.self) { sturlDatas, location in
                 return drop(sturlDatas, at: location, in: geometry)
             }
+            .onChange(of: document.background.failureReason) { oldValue, newValue in
+                showBackgroundFailureAlert = (newValue != nil)
+            }
+            .alert(
+                "Set Background",
+                isPresented: $showBackgroundFailureAlert,
+                presenting: document.background.failureReason,
+                actions: { reason in
+                    Button("OK", role: .cancel) {}
+                },
+                message: { reason in
+                    Text(reason)
+                }
+            )
         }
     }
+    
+    @State private var showBackgroundFailureAlert = false
     
     @State private var zoom: CGFloat = 1
     @State private var pan: CGOffset = .zero
@@ -66,18 +85,11 @@ struct EmojiArtDocumentView: View {
     
     @ViewBuilder
     private func documentContents(in geometry: GeometryProxy) -> some View {
-        AsyncImage(url: document.background) {phase in
-            if let image = phase.image {
-                image
-            } else if let url = document.background {
-                if phase.error != nil {
-                    Text("\(url)")
-                } else {
-                    ProgressView()
-                }
-            }
+        if let uiImage = document.background.uiImage {
+            Image(uiImage: uiImage)
+                .position(Emoji.Position.zero.in(geometry))
         }
-            .position(Emoji.Position.zero.in(geometry))
+            
         // emojis
         ForEach(document.emojis) { emoji in
             Text(emoji.string)
